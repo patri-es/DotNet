@@ -27,4 +27,15 @@ You can add any code you need for your console application. ```DateTime.Now``` f
 - Then when finish, add the refences to the Debug or Release folders from the project
 - All dependencies are referenced in the .csproj file.
 
-### Humanizer package v.2.14.1 was installed 
+** Humanizer package v.2.14.1 was installed 
+
+### Whe will add a Fibonacci calculator to MyConsoleApp to test the debugger.
+The Fibonacci sequence is a set of numbers starting with 0 and 1, and each subsequent number is the sum of the previous two. The sequence continues like this:
+```
+0, 1, 1, 2, 3, 5, 8, 13, 21...
+```
+We copy the code of the example that has a bug, and we'll check it in the debugger console. 
+
+### Added some traces and debugs in the calculator program
+Check debuging, running and releasing the program the differents of results
+[Ejercice of example link.](https://learn.microsoft.com/es-es/training/modules/dotnet-debug/6-use-logging-and-tracing)
