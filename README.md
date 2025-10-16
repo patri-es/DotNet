@@ -86,3 +86,46 @@ If you work in an enterprise environment, it is recommended that you carefully c
 Related links:
 - [documentación del CLI de .NET](https://learn.microsoft.com/es-es/dotnet/core/tools/)
 - [documentación de NuGet ](https://learn.microsoft.com/es-es/nuget/)
+
+## 3. Interactively debug .NET applications with the Visual Studio Code debugger
+As any programming knows, you have to debug your code to find bugs and fix they. 
+- Do click over the left of the number line in VS Code to add a new point to interruptus the execution of the code. 
+- Do right click in the same area or over one point that already have, to define a condition for this point, this will stopped the execution only when this line is executed and when the condition is met.
+
+- To start the debug, you need select the debug option in the play icon of any .net file. (Program.cs in our example), them you wil see the pannel with options to continuous line by line...
+
+- You can create also a **launch.json** file if you need. ***.vscode/launch.json***
+
+### Viewing and Editing Variable State
+Debugging, variables are dilsplayed organized by scope:
+- Local variables (accesible withim the current scope, usually the current function)
+- Global variables (accesible from anywhere in the program. System objects from JS also included)
+- Closure variables (accesible from the current closure, if one exists. Combine the local scope of a function with the scope of the outer function to which belongs)
+
+You can view all the objects properties, and change the value of a variable  on the fly by double-clicking on it.
+
+### Call stack
+Represents the sequence of function calls. It's useful for finding the origin of an exception for example.
+
+*De izquierda a derecha, los controles son:
+
+- Continuar o pausar la ejecución: si la ejecución está en pausa, continuará hasta que se alcance el siguiente punto de interrupción. Si el programa se está ejecutando, el botón se convertirá en un botón de pausa que puede usar para pausar la ejecución.
+- Depurar paso a paso: Ejecuta la siguiente instrucción de código en el contexto actual.
+- Entrar en: Al igual que Saltar sobre, pero si la siguiente instrucción es una llamada a función, se dirigirá a la primera instrucción de código de esta función (igual que el comando step).
+- Salir de la depuración: Si está dentro de una función, ejecute el código restante de esta y vuelva a la instrucción después de la llamada de función inicial (igual que el comando out).
+- Reiniciar: reinicie el programa desde el principio.
+Stop: finalice la ejecución y salga del depurador.
+
+***
+- Para mostrar u ocultar la consola de depuración, seleccione Ctrl+Mayús+Y 
+- Puede escribir una expresión de .NET en el campo de entrada en la parte inferior de la consola de depuración y, a continuación, seleccionar Entrar para evaluarla. El resultado se muestra directamente en la consola.
+
+- You can select the launch console between ***console*** and ***integratedTerminal***, for that you need add in the launch.json:
+
+```JSON
+"console": "internalConsole",
+    or
+"console": "integratedTerminal",
+```
+
+### Whe will add a Fibonacci calculator to MyConsoleApp to test the debugger.
