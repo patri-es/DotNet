@@ -1,5 +1,5 @@
 ﻿using Humanizer;
-using System;
+using System.Diagnostics;
 
 // See https://aka.ms/new-console-template for more information
 
@@ -27,19 +27,23 @@ HumanizeDates();
 Console.WriteLine("Fibonacci Calculator results:");
 int result = Fibonacci(5);
 Console.WriteLine(result);
+Debug.WriteLine($"Entering {nameof(Fibonacci)} method");
 
 static int Fibonacci(int n)
 {
     int n1 = 0;
     int n2 = 1;
     int sum;
+    Debug.WriteLine($"We are looking for the {n}th number");
 
-    for (int i = 2; i <= n; i++)
+    for (int i = 2; i < n; i++)
     {
         sum = n1 + n2;
         n1 = n2;
         n2 = sum;
+        Debug.WriteLineIf(sum == 4, $"sum is 4, n1 is {n1}, n2 is {n2}");
     }
 
+    Debug.Assert(n2 == 5, "No devuelve 5....");
     return n == 0 ? n1 : n2;
 }

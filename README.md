@@ -104,7 +104,7 @@ Debugging, variables are dilsplayed organized by scope:
 
 You can view all the objects properties, and change the value of a variable  on the fly by double-clicking on it.
 
-### Call stack
+### [Call Stack](https://learn.microsoft.com/es-es/visualstudio/debugger/how-to-use-the-call-stack-window?view=vs-2022)
 Represents the sequence of function calls. It's useful for finding the origin of an exception for example.
 
 *De izquierda a derecha, los controles son:
@@ -143,4 +143,75 @@ In the left menu, the play icon with a litle bug, shows the options by debugger.
   ]
 }
 
-### Whe will add a Fibonacci calculator to MyConsoleApp to test the debugger.
+- We add a Fibonacci calculator to MyConsoleApp to test the debugger.
+
+### Logging and tracing in .NET applications
+The tracing is a way to monitorized the execution of your application while it's working. You can add tracing and debugging instrumentation to your .NET application as you develop it. You can also use that intrumentation while developing the application and after you deploy it.
+
+- Creating logs allows for detailed "post morten" review over long periods of time.
+#### Writing information to output windows
+In applications of .NET with user interfaces (not Console App), we have ```System.Console``` which records messages "in the background". Those messages can shows in output window of the IDE (VS or VS Code). And can generate a log as logcat in Android. As result, you must to be carefull using ```System.Console.WriteLine```.
+
+For that, you have others options to log and trace the application:
+
+- ```System.Console``` 
+    - alwais available, alwais write in the console
+    - Usefful by the information neede to see the client
+    - Usually by the temporal debbugger, and not checked in the code control.
+- ```System.Diagnostics.Trace``` 
+    - available only when ```TRACE``` is defined
+    - Writes to associated listeners, by default: DefaultTraceListener
+    - Use it to create traces that will be available in most compilations.
+- ```System.Diagnostics.Debug```
+    - available only when ```DEBUG``` is defined (in debugger mode)
+    - Write in associate debugger
+    - Use it to create traces that will only be available in debugger compilations.
+
+```C#
+Console.WriteLine("This message is readable by the end user.");
+Trace.WriteLine("This is a trace message when tracing the app.");
+Debug.WriteLine("This is a debug message just for developers.");
+```
+
+- Varias instrucciones Write rellenadas con información no relacionada crean un registro que es difícil de leer. 
+- Por otro lado, usar WriteLine para colocar instrucciones relacionadas en líneas independientes puede hacer que sea difícil distinguir la información del mismo tipo. 
+- En general, use varias instrucciones Write cuando quiera combinar información de varios orígenes para crear un único mensaje informativo. 
+- Por otro lado, use la instrucción WriteLine cuando quiera crear un único mensaje completo.
+
+#### TRACE and DEBUG constants
+- As default, DEBUG is defined when the app is executed with Debug mode. To controll it, you can add ***DefineConstants*** in the **.csproj** file. 
+
+This example shows the configuration to Debug, Releace and to activate TRACE:
+``` XML
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+</PropertyGroup>
+<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+</PropertyGroup>
+```
+- If you don't have a debugger asociated, you'll need to configurate a listener of tracer as ```dotnet-trace```
+-Yo can add conditions by tracer and debug with ```WriteIf``` and ```WriteLineIf```
+```C#
+bool errorFlag = false;  
+System.Diagnostics.Trace.WriteIf(errorFlag, "Error in AppendData procedure.");  
+System.Diagnostics.Debug.WriteIf(errorFlag, "Transaction abandoned."); 
+```
+
+#### Checking that certain conditions exist
+- **Assert** test a condition that you specify as argument of instruccion ```Assert```. If the condition is ***True***, don't happend anything, if it's ***False***, shows an assert error, in this case if you are debugging, provoque an exception. 
+- You can use **Assert** in Debug and Trace (in **System.Diagnostics** NameSpace)
+- The Debug methods aren't not included in the release version, so don't bloat or slow down the final version of the code.
+
+```C#
+int IntegerDivide(int dividend, int divisor)
+{
+    Debug.Assert(divisor != 0, $"{nameof(divisor)} is 0 and will cause an exception.");
+
+    return dividend / divisor;
+}
+```
+- Be careful when including this Debug.Assert, verify that the results don't change if you remove the line, as this line will not be included in the release version.
+
+Related links: [Debug with VS Code](https://code.visualstudio.com/docs/debugtest/debugging), [Tutorial: Debug with VS Code](https://learn.microsoft.com/es-es/dotnet/core/tutorials/debugging-with-visual-studio-code)
+
