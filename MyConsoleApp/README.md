@@ -34,4 +34,4 @@ The Fibonacci sequence is a set of numbers starting with 0 and 1, and each subse
 ```
 0, 1, 1, 2, 3, 5, 8, 13, 21...
 ```
-We copi the code of the example that has a bug, and we'll check it in the debugger console. 
+We copy the code of the example that has a bug, and we'll check it in the debugger console. 

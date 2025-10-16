@@ -127,5 +127,20 @@ Stop: finalice la ejecución y salga del depurador.
     or
 "console": "integratedTerminal",
 ```
+In the left menu, the play icon with a litle bug, shows the options by debugger. If you don't have the launch file, here are an option to created and select the console to use.{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "coreclr",
+      "request": "launch",
+      "name": "Launch MyConsoleApp (.NET)",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/MyConsoleApp/bin/Debug/net8.0/MyConsoleApp.dll",
+      "cwd": "${workspaceFolder}/MyConsoleApp",
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
+    }
+  ]
+}
 
 ### Whe will add a Fibonacci calculator to MyConsoleApp to test the debugger.
