@@ -27,3 +27,4 @@ You can add any code you need for your console application. ```DateTime.Now``` f
 - Then when finish, add the refences to the Debug or Release folders from the project
 - All dependencies are referenced in the .csproj file.
 
+### Humanizer package v.2.14.1 was installed 
