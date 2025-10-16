@@ -18,3 +18,12 @@
 
 ## Edit the code of Program.cs
 You can add any code you need for your console application. ```DateTime.Now``` for Example, or anything else you need. 
+
+# Add packages to the project (next learning paht module)
+1- Check any package before install: https://www.nuget.org/packages/<package name>
+- By all Dependencias review: Mantenaince, Licences, Size...
+- Install using the CLI of .NET Core: with: ```dotnet add package <package name>```
+- This will save the code in a memory caché that can use all projects.
+- Then when finish, add the refences to the Debug or Release folders from the project
+- All dependencies are referenced in the .csproj file.
+
