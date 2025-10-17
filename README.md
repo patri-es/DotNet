@@ -212,3 +212,25 @@ foreach (var file in files)
 // stores/totals.txt
 // stores/sales.json
 ```
+- Both functions have a overload that allow a paremeter to specify search pattern. Another overload is to specify get all recursive folders: ```Directory.allFilesInAllFolders``` and ```Directory.EnumerateFiles ```
+```C#
+// Find all *.txt files in the stores folder and its subfolders
+IEnumerable<string> allFilesInAllFolders = Directory.EnumerateFiles("stores", "*.txt", SearchOption.AllDirectories);
+
+foreach (var file in allFilesInAllFolders)
+{
+    Console.WriteLine(file);
+}
+
+// Outputs:
+// stores/totals.txt
+// stores/201/inventory.txt
+```
+
+- I cloned and created the folder ***mslearn-dotnet-files*** to follow the example. Check it for more information.
+
+- If you use .NET 6 or older, It's needed to add those Name Spaces. The rest, have automatily included in the property group ***ImplcitUsings*** :
+```C#
+using System.IO;
+using System.Collections.Generic;
+```
