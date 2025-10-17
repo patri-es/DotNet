@@ -234,3 +234,55 @@ foreach (var file in allFilesInAllFolders)
 using System.IO;
 using System.Collections.Generic;
 ```
+
+### Special Directories
+Not all system has this concept. Ussually they are by things as Main folder of the User, temporaly files....
+For that, .NET has the enumeration: **System.Environment.SpecialFolder** that specify const by get the routes of those specials system folders. 
+```C#
+//This get "Documents" in windows or "Home" in linux
+string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); 
+```
+
+###  Path class: 
+.NET have included a Class for that: **System.IO.Path**. This class don't check if the route exit or not. They are concepts routes, not real.
+- Access Routes. This class has a input to get **the separator chard** \ or / that its depend of the operative system:
+```C#
+Console.WriteLine($"stores{Path.DirectorySeparatorChar}201");
+
+// returns:
+// stores\201 on Windows
+//
+// stores/201 on macOS
+``` 
+Here are some useful methods of this class:
+- Routes combines. You can use Path to create automatily the correct route:
+```C#
+Console.WriteLine(Path.Combine("stores","201")); // outputs: stores/201
+```
+- You can request the extension of a file with **GetExtension** 
+```C#
+Console.WriteLine(Path.GetExtension("sales.json")); // outputs: .json
+```
+- To know more information about a file or directory use: **FileInfo** or **DirectoryInfo**.
+```C#
+string fileName = $"stores{Path.DirectorySeparatorChar}201{Path.DirectorySeparatorChar}sales{Path.DirectorySeparatorChar}sales.json";
+
+FileInfo info = new FileInfo(fileName);
+
+Console.WriteLine($"Full Name: {info.FullName}{Environment.NewLine}Directory: {info.Directory}{Environment.NewLine}Extension: {info.Extension}{Environment.NewLine}Create Date: {info.CreationTime}"); // And many more
+```
+
+### Directory and file class:
+They are by search, create, move, copy, rename, remove or modify. 
+- ```Directory.CreateDirectory``` to make sure than the directory exist, if not, create it:
+```C#
+Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "stores","201","newDir"));
+```
+- ```Directory.Exists``` to check than the directory exist:
+```C#
+bool doesDirectoryExist = Directory.Exists(filePath);
+```
+- ```File.WriteAllText``` to create and write a file, if is already exist, it will be overwrites:
+```C#
+File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "greeting.txt"), "Hello World!");
+```

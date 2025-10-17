@@ -31,7 +31,8 @@ Microsoft and any contributors reserve all other rights, whether under their res
 or trademarks, whether by implication, estoppel or otherwise.
 
 
-# This is an example from Learning Path module 5, working with File System
+# Learning Path module 5, working with File System Example:
+
 - This project was cloned from: 
 ```Bash
 git clone https://github.com/MicrosoftDocs/mslearn-dotnet-files && cd mslearn-dotnet-files
@@ -44,3 +45,8 @@ dotnet new console -f net8.0 -n mslearn-dotnet-files -o .
 ```Bash
 code -a .
 ```
+### - First part in Program.cs is by simple structure of folders and files, with Directory
+### - Second, Iterate through directories and get the current directory, with Directory
+### - Third, exercise about work with routes using Path, improving the first program.
+### - Fourth, create a new directory and file by sumary the datas.
+### - Five, sumary the datas of the files and write totals.
