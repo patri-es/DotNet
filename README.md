@@ -107,19 +107,6 @@ You can view all the objects properties, and change the value of a variable  on 
 ### [Call Stack](https://learn.microsoft.com/es-es/visualstudio/debugger/how-to-use-the-call-stack-window?view=vs-2022)
 Represents the sequence of function calls. It's useful for finding the origin of an exception for example.
 
-*De izquierda a derecha, los controles son:
-
-- Continuar o pausar la ejecución: si la ejecución está en pausa, continuará hasta que se alcance el siguiente punto de interrupción. Si el programa se está ejecutando, el botón se convertirá en un botón de pausa que puede usar para pausar la ejecución.
-- Depurar paso a paso: Ejecuta la siguiente instrucción de código en el contexto actual.
-- Entrar en: Al igual que Saltar sobre, pero si la siguiente instrucción es una llamada a función, se dirigirá a la primera instrucción de código de esta función (igual que el comando step).
-- Salir de la depuración: Si está dentro de una función, ejecute el código restante de esta y vuelva a la instrucción después de la llamada de función inicial (igual que el comando out).
-- Reiniciar: reinicie el programa desde el principio.
-Stop: finalice la ejecución y salga del depurador.
-
-***
-- Para mostrar u ocultar la consola de depuración, seleccione Ctrl+Mayús+Y 
-- Puede escribir una expresión de .NET en el campo de entrada en la parte inferior de la consola de depuración y, a continuación, seleccionar Entrar para evaluarla. El resultado se muestra directamente en la consola.
-
 - You can select the launch console between ***console*** and ***integratedTerminal***, for that you need add in the launch.json:
 
 ```JSON
@@ -127,22 +114,6 @@ Stop: finalice la ejecución y salga del depurador.
     or
 "console": "integratedTerminal",
 ```
-In the left menu, the play icon with a litle bug, shows the options by debugger. If you don't have the launch file, here are an option to created and select the console to use.{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "coreclr",
-      "request": "launch",
-      "name": "Launch MyConsoleApp (.NET)",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/MyConsoleApp/bin/Debug/net8.0/MyConsoleApp.dll",
-      "cwd": "${workspaceFolder}/MyConsoleApp",
-      "stopAtEntry": false,
-      "console": "integratedTerminal"
-    }
-  ]
-}
-
 - We add a Fibonacci calculator to MyConsoleApp to test the debugger.
 
 ### Logging and tracing in .NET applications
@@ -172,11 +143,6 @@ Console.WriteLine("This message is readable by the end user.");
 Trace.WriteLine("This is a trace message when tracing the app.");
 Debug.WriteLine("This is a debug message just for developers.");
 ```
-
-- Varias instrucciones Write rellenadas con información no relacionada crean un registro que es difícil de leer. 
-- Por otro lado, usar WriteLine para colocar instrucciones relacionadas en líneas independientes puede hacer que sea difícil distinguir la información del mismo tipo. 
-- En general, use varias instrucciones Write cuando quiera combinar información de varios orígenes para crear un único mensaje informativo. 
-- Por otro lado, use la instrucción WriteLine cuando quiera crear un único mensaje completo.
 
 #### TRACE and DEBUG constants
 - As default, DEBUG is defined when the app is executed with Debug mode. To controll it, you can add ***DefineConstants*** in the **.csproj** file. 
@@ -215,3 +181,115 @@ int IntegerDivide(int dividend, int divisor)
 
 Related links: [Debug with VS Code](https://code.visualstudio.com/docs/debugtest/debugging), [Tutorial: Debug with VS Code](https://learn.microsoft.com/es-es/dotnet/core/tutorials/debugging-with-visual-studio-code)
 
+
+
+## 4. Working with files and directories in .NET application
+### File System (System.IO NameSpace): 
+System.IO has types integrated that allow interact with files and directories using GET and SET, searching, writing and readding. 
+
+- Listing all directories: ```Directory.EnumerateDirectories ```
+```C#
+IEnumerable<string> listOfDirectories = Directory.EnumerateDirectories("stores");
+
+foreach (var dir in listOfDirectories) {
+    Console.WriteLine(dir);
+}
+
+// Outputs:
+// stores/201
+// stores/202
+```
+- Listing all files from a directory: ```Directory.EnumerateFiles ```
+```C#
+IEnumerable<string> files = Directory.EnumerateFiles("stores");
+
+foreach (var file in files)
+{
+    Console.WriteLine(file);
+}
+
+// Outputs:
+// stores/totals.txt
+// stores/sales.json
+```
+- Both functions have a overload that allow a paremeter to specify search pattern. Another overload is to specify get all recursive folders: ```Directory.allFilesInAllFolders``` and ```Directory.EnumerateFiles ```
+```C#
+// Find all *.txt files in the stores folder and its subfolders
+IEnumerable<string> allFilesInAllFolders = Directory.EnumerateFiles("stores", "*.txt", SearchOption.AllDirectories);
+
+foreach (var file in allFilesInAllFolders)
+{
+    Console.WriteLine(file);
+}
+
+// Outputs:
+// stores/totals.txt
+// stores/201/inventory.txt
+```
+
+- I cloned and created the folder ***mslearn-dotnet-files*** to follow the example. Check it for more information.
+
+- If you use .NET 6 or older, It's needed to add those Name Spaces. The rest, have automatily included in the property group ***ImplcitUsings*** :
+```C#
+using System.IO;
+using System.Collections.Generic;
+```
+
+### Special Directories
+Not all system has this concept. Ussually they are by things as Main folder of the User, temporaly files....
+For that, .NET has the enumeration: **System.Environment.SpecialFolder** that specify const by get the routes of those specials system folders. 
+```C#
+//This get "Documents" in windows or "Home" in linux
+string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments); 
+```
+
+###  Path class: 
+.NET have included a Class for that: **System.IO.Path**. This class don't check if the route exit or not. They are concepts routes, not real.
+- Access Routes. This class has a input to get **the separator chard** \ or / that its depend of the operative system:
+```C#
+Console.WriteLine($"stores{Path.DirectorySeparatorChar}201");
+
+// returns:
+// stores\201 on Windows
+//
+// stores/201 on macOS
+``` 
+Here are some useful methods of this class:
+- Routes combines. You can use Path to create automatily the correct route:
+```C#
+Console.WriteLine(Path.Combine("stores","201")); // outputs: stores/201
+```
+- You can request the extension of a file with **GetExtension** 
+```C#
+Console.WriteLine(Path.GetExtension("sales.json")); // outputs: .json
+```
+- To know more information about a file or directory use: **FileInfo** or **DirectoryInfo**.
+```C#
+string fileName = $"stores{Path.DirectorySeparatorChar}201{Path.DirectorySeparatorChar}sales{Path.DirectorySeparatorChar}sales.json";
+
+FileInfo info = new FileInfo(fileName);
+
+Console.WriteLine($"Full Name: {info.FullName}{Environment.NewLine}Directory: {info.Directory}{Environment.NewLine}Extension: {info.Extension}{Environment.NewLine}Create Date: {info.CreationTime}"); // And many more
+```
+
+### Directory and file class:
+They are by search, create, move, copy, rename, remove or modify. 
+- ```Directory.CreateDirectory``` to make sure than the directory exist, if not, create it:
+```C#
+Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "stores","201","newDir"));
+```
+- ```Directory.Exists``` to check than the directory exist:
+```C#
+bool doesDirectoryExist = Directory.Exists(filePath);
+```
+- ```File.WriteAllText``` to create and write a file, if is already exist, it will be overwrites:
+```C#
+File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "greeting.txt"), "Hello World!");
+```
+
+### Write and read files:
+- ```File.ReadAllText``` to read the file
+```C#
+File.ReadAllText($"stores{Path.DirectorySeparatorChar}201{Path.DirectorySeparatorChar}sales.json");
+```
+- As in the example are .json files, to analize the datas, we need add ```Json.NET``` package from NuGet: ```dotnet add package Newtonsoft.Json``` and add the reference in the Program.cs file ```using Newtonsoft.Json;```
