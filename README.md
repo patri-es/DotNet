@@ -107,19 +107,6 @@ You can view all the objects properties, and change the value of a variable  on 
 ### [Call Stack](https://learn.microsoft.com/es-es/visualstudio/debugger/how-to-use-the-call-stack-window?view=vs-2022)
 Represents the sequence of function calls. It's useful for finding the origin of an exception for example.
 
-*De izquierda a derecha, los controles son:
-
-- Continuar o pausar la ejecución: si la ejecución está en pausa, continuará hasta que se alcance el siguiente punto de interrupción. Si el programa se está ejecutando, el botón se convertirá en un botón de pausa que puede usar para pausar la ejecución.
-- Depurar paso a paso: Ejecuta la siguiente instrucción de código en el contexto actual.
-- Entrar en: Al igual que Saltar sobre, pero si la siguiente instrucción es una llamada a función, se dirigirá a la primera instrucción de código de esta función (igual que el comando step).
-- Salir de la depuración: Si está dentro de una función, ejecute el código restante de esta y vuelva a la instrucción después de la llamada de función inicial (igual que el comando out).
-- Reiniciar: reinicie el programa desde el principio.
-Stop: finalice la ejecución y salga del depurador.
-
-***
-- Para mostrar u ocultar la consola de depuración, seleccione Ctrl+Mayús+Y 
-- Puede escribir una expresión de .NET en el campo de entrada en la parte inferior de la consola de depuración y, a continuación, seleccionar Entrar para evaluarla. El resultado se muestra directamente en la consola.
-
 - You can select the launch console between ***console*** and ***integratedTerminal***, for that you need add in the launch.json:
 
 ```JSON
@@ -127,22 +114,6 @@ Stop: finalice la ejecución y salga del depurador.
     or
 "console": "integratedTerminal",
 ```
-In the left menu, the play icon with a litle bug, shows the options by debugger. If you don't have the launch file, here are an option to created and select the console to use.{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "coreclr",
-      "request": "launch",
-      "name": "Launch MyConsoleApp (.NET)",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/MyConsoleApp/bin/Debug/net8.0/MyConsoleApp.dll",
-      "cwd": "${workspaceFolder}/MyConsoleApp",
-      "stopAtEntry": false,
-      "console": "integratedTerminal"
-    }
-  ]
-}
-
 - We add a Fibonacci calculator to MyConsoleApp to test the debugger.
 
 ### Logging and tracing in .NET applications
@@ -172,11 +143,6 @@ Console.WriteLine("This message is readable by the end user.");
 Trace.WriteLine("This is a trace message when tracing the app.");
 Debug.WriteLine("This is a debug message just for developers.");
 ```
-
-- Varias instrucciones Write rellenadas con información no relacionada crean un registro que es difícil de leer. 
-- Por otro lado, usar WriteLine para colocar instrucciones relacionadas en líneas independientes puede hacer que sea difícil distinguir la información del mismo tipo. 
-- En general, use varias instrucciones Write cuando quiera combinar información de varios orígenes para crear un único mensaje informativo. 
-- Por otro lado, use la instrucción WriteLine cuando quiera crear un único mensaje completo.
 
 #### TRACE and DEBUG constants
 - As default, DEBUG is defined when the app is executed with Debug mode. To controll it, you can add ***DefineConstants*** in the **.csproj** file. 
@@ -215,3 +181,34 @@ int IntegerDivide(int dividend, int divisor)
 
 Related links: [Debug with VS Code](https://code.visualstudio.com/docs/debugtest/debugging), [Tutorial: Debug with VS Code](https://learn.microsoft.com/es-es/dotnet/core/tutorials/debugging-with-visual-studio-code)
 
+
+
+## 4. Working with files and directories in .NET application
+### File System (System.IO NameSpace): 
+System.IO has types integrated that allow interact with files and directories using GET and SET, searching, writing and readding. 
+
+- Listing all directories: ```Directory.EnumerateDirectories ```
+```C#
+IEnumerable<string> listOfDirectories = Directory.EnumerateDirectories("stores");
+
+foreach (var dir in listOfDirectories) {
+    Console.WriteLine(dir);
+}
+
+// Outputs:
+// stores/201
+// stores/202
+```
+- Listing all files from a directory: ```Directory.EnumerateFiles ```
+```C#
+IEnumerable<string> files = Directory.EnumerateFiles("stores");
+
+foreach (var file in files)
+{
+    Console.WriteLine(file);
+}
+
+// Outputs:
+// stores/totals.txt
+// stores/sales.json
+```
