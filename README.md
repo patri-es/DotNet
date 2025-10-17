@@ -286,3 +286,10 @@ bool doesDirectoryExist = Directory.Exists(filePath);
 ```C#
 File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "greeting.txt"), "Hello World!");
 ```
+
+### Write and read files:
+- ```File.ReadAllText``` to read the file
+```C#
+File.ReadAllText($"stores{Path.DirectorySeparatorChar}201{Path.DirectorySeparatorChar}sales.json");
+```
+- As in the example are .json files, to analize the datas, we need add ```Json.NET``` package from NuGet: ```dotnet add package Newtonsoft.Json``` and add the reference in the Program.cs file ```using Newtonsoft.Json;```
